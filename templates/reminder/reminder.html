@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reminder</title>
+</head>
+<body>
+<p><mark>{{ errors }}</mark></p>
+<form action="{% url 'reminder:reminder' %}" method="get">
+    {{ reminder_form.as_p }}
+    <input type="submit" name="submit" value="OK">
+</form>
+</body>
+</html>
