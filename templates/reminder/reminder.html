@@ -5,8 +5,8 @@
     <title>Reminder</title>
 </head>
 <body>
-<p><mark>{{ errors }}</mark></p>
-<form action="{% url 'reminder:reminder' %}" method="get">
+<form action="{% url 'reminder:reminder' %}" method="post">
+    {% csrf_token %}
     {{ reminder_form.as_p }}
     <input type="submit" name="submit" value="OK">
 </form>

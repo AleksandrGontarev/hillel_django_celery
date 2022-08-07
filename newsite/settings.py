@@ -111,7 +111,7 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Kiev'
 
-USE_I18N = True
+USE_I18N = False
 
 USE_TZ = True
 
@@ -134,3 +134,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 CELERY_TIMEZONE = 'Europe/Kiev'
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TASK_ALWAYS_EAGER = False
+

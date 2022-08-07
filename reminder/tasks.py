@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 
 
 @shared_task
-def send_email(email, text_reminder, data_reminder):
+def send(email, text_reminder):
 
     send_mail(
         'Reminder',
