@@ -9,4 +9,5 @@ urlpatterns = [
     path('reminder/', views.reminder, name='reminder'),
     path('', views.home, name='home'),
 
+
 ]

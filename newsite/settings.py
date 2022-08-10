@@ -9,12 +9,16 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
+
 import os
 from pathlib import Path
 
+from celery.schedules import crontab
+
+from django import db
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -27,7 +31,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_celery_results',
+    'django_extensions',
 
     'reminder',
 ]
@@ -73,7 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'newsite.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -81,9 +84,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'OPTIONS': {
+            'timeout': 20,
+        }
+
     }
 }
 
+db.connections.close_all()
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -103,7 +111,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -111,10 +118,9 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Kiev'
 
-USE_I18N = False
+USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -132,7 +138,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # CELERY
 CELERY_TIMEZONE = 'Europe/Kiev'
+CELERY_TASK_TRACK_STARTED = True
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = 'django-db'
-CELERY_TASK_ALWAYS_EAGER = False
-
+CELERY_BEAT_SCHEDULE = {
+    "parsing": {
+        "task": "reminder.tasks.parse_news",
+        "schedule": crontab(minute=0, hour="1-23/2"),
+    }
+}
