@@ -144,6 +144,7 @@ CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BEAT_SCHEDULE = {
     "parsing": {
         "task": "reminder.tasks.parse_news",
-        "schedule": crontab(minute=0, hour="1-23/2"),
+        # "schedule": crontab(minute=0, hour="1-23/2"),
+        "schedule": crontab(minute="*/1"),
     }
 }

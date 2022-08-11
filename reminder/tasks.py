@@ -42,8 +42,9 @@ def parse_news():
     head_url = "https://quotes.toscrape.com/"
     url = "https://quotes.toscrape.com/"
     z = 0
-    q = 0
-    for y in range(find_pages(url) + 1):
+    # q = 0
+    for y in range(9999):
+    # for y in range(find_pages(url) + 1):
         if z == 5:
             break
         url = f"https://quotes.toscrape.com/page/{y}/"
@@ -63,8 +64,10 @@ def parse_news():
                 z += 1
             if z == 5:
                 break
-        q += 1
-    if find_pages(head_url) == q:
-        email = "sanya@gmail.com"
-        text_reminder = "no more quote"
-        send(email=email, text_reminder=text_reminder)
+        # q += 1
+    # if find_pages(head_url) == q:
+        if not find_request(url).find('li', {'class': 'next'}):
+            email = "sanya@gmail.com"
+            text_reminder = "no more quote"
+            send(email=email, text_reminder=text_reminder)
+            break
