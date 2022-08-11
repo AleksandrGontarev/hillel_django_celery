@@ -32,7 +32,7 @@ def parse_news():
     head_url = "https://quotes.toscrape.com/"
     url = "https://quotes.toscrape.com/"
     z = 0
-    while find_request(url).find_all("div", {"class": "quote"}):
+    while True:
         quote = find_request(url).find_all("div", {"class": "quote"})
         for i in quote:
             text_quote = i.span.text
