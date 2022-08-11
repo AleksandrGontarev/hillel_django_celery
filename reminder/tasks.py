@@ -26,28 +26,13 @@ def find_request(url):
     return soup
 
 
-def find_pages(url):
-    head_url = url
-    number_of_pages = 1
-    while find_request(url).find('li', {'class': 'next'}):
-        next_page = find_request(url).find('li', {'class': 'next'})
-        link_next_page = next_page.a.get("href")
-        url = head_url + link_next_page
-        number_of_pages += 1
-    return number_of_pages
-
-
 @shared_task
 def parse_news():
+    flag_out = False
     head_url = "https://quotes.toscrape.com/"
     url = "https://quotes.toscrape.com/"
     z = 0
-    # q = 0
-    for y in range(9999):
-    # for y in range(find_pages(url) + 1):
-        if z == 5:
-            break
-        url = f"https://quotes.toscrape.com/page/{y}/"
+    while find_request(url).find_all("div", {"class": "quote"}):
         quote = find_request(url).find_all("div", {"class": "quote"})
         for i in quote:
             text_quote = i.span.text
@@ -63,11 +48,15 @@ def parse_news():
                                              authors=b[0])
                 z += 1
             if z == 5:
+                flag_out = True
                 break
-        # q += 1
-    # if find_pages(head_url) == q:
+        if flag_out:
+            break
         if not find_request(url).find('li', {'class': 'next'}):
             email = "sanya@gmail.com"
             text_reminder = "no more quote"
             send(email=email, text_reminder=text_reminder)
             break
+        next_page = find_request(url).find('li', {'class': 'next'})
+        link_next_page = next_page.a.get("href")
+        url = head_url + link_next_page
