@@ -30,7 +30,7 @@ def find_request(url):
 def parse_news():
     flag_out = False
     head_url = "https://quotes.toscrape.com/"
-    url = "https://quotes.toscrape.com/"
+    url = head_url
     z = 0
     while True:
         quote = find_request(url).find_all("div", {"class": "quote"})
